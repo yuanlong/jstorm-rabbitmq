@@ -1,14 +1,18 @@
 package io.latent.storm.rabbitmq;
 
+import java.io.Serializable;
 import java.nio.ByteBuffer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.rabbitmq.client.LongString;
-import org.apache.storm.spout.Scheme;
-import org.apache.storm.task.TopologyContext;
-import org.apache.storm.tuple.Fields;
 
-import java.io.Serializable;
+import backtype.storm.spout.Scheme;
+import backtype.storm.task.TopologyContext;
+import backtype.storm.tuple.Fields;
 
 
 public class RabbitMQMessageScheme implements MessageScheme {
@@ -40,7 +44,7 @@ public class RabbitMQMessageScheme implements MessageScheme {
     Message.DeliveredMessage dm = (Message.DeliveredMessage)message;
     Envelope envelope = createEnvelope(dm);
     Properties properties = createProperties(dm);
-    List<Object> payloadValues = deserialize(ByteBuffer.wrap(dm.getBody()));
+    List<Object> payloadValues = deserialize(dm.getBody());
 
     List<Object> values = new ArrayList<Object>();
     values.addAll(payloadValues);
@@ -51,7 +55,7 @@ public class RabbitMQMessageScheme implements MessageScheme {
   }
 
   @Override
-  public List<Object> deserialize(ByteBuffer byteBuffer) {
+  public List<Object> deserialize(byte[] byteBuffer) {
     return payloadScheme.deserialize(byteBuffer);
   }
 

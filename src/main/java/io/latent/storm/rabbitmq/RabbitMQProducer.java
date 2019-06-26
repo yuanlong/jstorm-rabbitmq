@@ -1,15 +1,24 @@
 package io.latent.storm.rabbitmq;
 
-import com.rabbitmq.client.*;
-import io.latent.storm.rabbitmq.config.ConnectionConfig;
-import org.apache.storm.topology.ReportedFailedException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.AlreadyClosedException;
+import com.rabbitmq.client.BlockedListener;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.ShutdownListener;
+import com.rabbitmq.client.ShutdownSignalException;
+
+import backtype.storm.topology.ReportedFailedException;
+import io.latent.storm.rabbitmq.config.ConnectionConfig;
 
 public class RabbitMQProducer implements Serializable {
   private final Declarator declarator;
